@@ -41,16 +41,30 @@ Function.prototype.myBind = function (ctx) {
       let allArgs = result.concat(callArgs)
       return that.apply(ctx, allArgs.slice(1))
     }
-  
-  
+
   }
+
+
+Function.prototype.myBind2 = function (ctx, ...bindArgs) {
+  let that = this;
+  
+  return function (...callArgs) {
+    let args = bindArgs.concat(callArgs)
+    return that.apply(ctx, args);
+  };
+
+};
+
+
+
+
 
 const markov = new Cat("Markov");
 const pavlov = new Dog("Pavlov");
 
-console.log(markov.says.myBind(pavlov, "meow", "Kush")());
-console.log(markov.says.myBind(pavlov)("meow", "a tree"));
-console.log(markov.says.myBind(pavlov, "meow")("Markov"));
+console.log(markov.says.myBind2(pavlov, "meow", "Kush")());
+console.log(markov.says.myBind2(pavlov)("meow", "a tree"));
+console.log(markov.says.myBind2(pavlov, "meow")("Markov"));
 
-const notMarkovSays = markov.says.myBind(pavlov);
+const notMarkovSays = markov.says.myBind2(pavlov);
 console.log(notMarkovSays("meow", "me"));
